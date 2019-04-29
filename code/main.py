@@ -23,15 +23,15 @@ def work(mode, train_data, test_data, dev_data, model, args, sampleround, epoch)
         batchcnt = (len(train_data) - 1) // args.batchsize + 1
         for b in range(batchcnt):
             start = time.time()
-            data = train_data[b * args.batchsize : (b+1) * args.batchsize]
+            data = train_data[b * args.batchsize:(b + 1) * args.batchsize]
             acc, cnt, tot = train(b, model, data, sampleround, mode, dataQueue, resultQueue, freeProcess, lock, args.numprocess)
             trainF1 = calcF1(acc, cnt, tot)
             if b % args.print_per_batch == 0:
-                print("    batch ", b, ": F1:", trainF1, "    time:", (time.time()-start))
+                print("    batch ", b, ": F1:", trainF1, "    time:", (time.time() - start))
         batchcnt = (len(dev_data) - 1) // args.batchsize_test + 1
         acc, cnt, tot = 0, 0, 0
         for b in range(batchcnt):
-            data = dev_data[b * args.batchsize_test : (b+1) * args.batchsize_test]
+            data = dev_data[b * args.batchsize_test:(b + 1) * args.batchsize_test]
             acc_, cnt_, tot_ = test(b, model, data, mode, dataQueue, resultQueue, freeProcess, lock, args.numprocess)
             acc += acc_
             cnt += cnt_
@@ -40,17 +40,17 @@ def work(mode, train_data, test_data, dev_data, model, args, sampleround, epoch)
         batchcnt = (len(test_data) - 1) // args.batchsize_test + 1
         acc, cnt, tot = 0, 0, 0
         for b in range(batchcnt):
-            data = test_data[b * args.batchsize_test : (b+1) * args.batchsize_test]
+            data = test_data[b * args.batchsize_test:(b + 1) * args.batchsize_test]
             acc_, cnt_, tot_ = test(b, model, data, mode, dataQueue, resultQueue, freeProcess, lock, args.numprocess)
             acc += acc_
             cnt += cnt_
             tot += tot_
         testF1 = calcF1(acc, cnt, tot)
-        f = open("checkpoints/"+args.logfile+".log", 'a')
+        f = open("checkpoints/" + args.logfile + ".log", 'a')
         print("epoch ", e, ": dev F1: ", devF1, ", test F1: ", testF1)
-        f.write("epoch "+ str(e)+ ": dev F1: "+ str(devF1)+ ", test F1: "+ str(testF1)+ "\n")
+        f.write("epoch " + str(e) + ": dev F1: " + str(devF1) + ", test F1: " + str(testF1) + "\n")
         f.close()
-        torch.save(model, "checkpoints/model_"+args.logfile+"_"+str(e))
+        torch.save(model, "checkpoints/model_" + args.logfile + "_" + str(e))
 
 
 if __name__ == "__main__":
@@ -86,7 +86,7 @@ if __name__ == "__main__":
     except RuntimeError:
         pass
     for name, param in model.named_parameters():
-        print (name, param.size(), param.get_device())
+        print(name, param.size(), param.get_device())
 
     processes = []
     dataQueue = mp.Queue()
@@ -104,14 +104,14 @@ if __name__ == "__main__":
         batchcnt = (len(test_data) - 1) // args.batchsize_test + 1
         acc, cnt, tot = 0, 0, 0
         for b in range(batchcnt):
-            data = test_data[b * args.batchsize_test : (b+1) * args.batchsize_test]
-            acc_, cnt_, tot_ = test(b, model, data, ["RE","NER"], dataQueue, resultQueue, freeProcess, lock, args.numprocess)
+            data = test_data[b * args.batchsize_test:(b + 1) * args.batchsize_test]
+            acc_, cnt_, tot_ = test(b, model, data, ["RE", "NER"], dataQueue, resultQueue, freeProcess, lock, args.numprocess)
             acc += acc_
             cnt += cnt_
             tot += tot_
             print(acc, cnt, tot)
         testF1 = calcF1(acc, cnt, tot)
-        print("test P: ", acc/cnt, "test R: ", acc/tot, "test F1: ", testF1)
+        print("test P: ", acc / cnt, "test R: ", acc / tot, "test F1: ", testF1)
     elif args.pretrain:
         work(["RE", "NER", "pretrain"], train_data, test_data, dev_data, model, args, 1, args.epochPRE)
     else:

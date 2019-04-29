@@ -5,7 +5,6 @@
 # Author: Tianyang Zhang, Ryuichi Takanobu
 # E-mail: keavilzhangzty@gmail.com, truthless11@gmail.com
 ############################################################
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -79,6 +78,8 @@ class Model(nn.Module):
         prehid = autograd.Variable(torch.cuda.FloatTensor(self.dim, ).fill_(0))
         prec = autograd.Variable(torch.cuda.FloatTensor(self.dim, ).fill_(0))
         front, back = [0 for i in range(len(text))], [0 for i in range(len(text))]
+        import pdb
+        pdb.set_trace()
         for x in range(len(text)):
             prehid, prec = self.preLSTML(wvs[x], (prehid, prec))
             front[x] = prehid
@@ -96,8 +97,7 @@ class Model(nn.Module):
         action = autograd.Variable(torch.cuda.LongTensor(1, ).fill_(0))
         rel_action = autograd.Variable(torch.cuda.LongTensor(1, ).fill_(0)) 
         for x in range(len(text)):                   
-            mem, prob = self.topModel(wordin[x],\
-                    self.relationvector(rel_action)[0], mem, training)
+            mem, prob = self.topModel(wordin[x], self.relationvector(rel_action)[0], mem, training)
             action = self.sample(prob, training, preoptions, x)
             if action.data[0] != 0: 
                 rel_action = action
