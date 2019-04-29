@@ -12,6 +12,7 @@ import queue
 from AccCalc import calc_acc, rule_actions
 from Optimize import optimize_round
 
+
 def workProcess(model, datas, sample_round, mode):
     acc, cnt, tot = 0, 0, 0
     loss = .0
@@ -20,25 +21,21 @@ def workProcess(model, datas, sample_round, mode):
         preoptions, preactions = rule_actions(data['relations'])   
         for i in range(sample_round):
             if "pretrain" in mode and "test" not in mode:
-                top_action, top_actprob, bot_action, bot_actprob = \
-                        model(mode, data['text'], \
-                        preoptions, preactions)
+                top_action, top_actprob, bot_action, bot_actprob = model(mode, data['text'], preoptions, preactions)
             else:
-                top_action, top_actprob, bot_action, bot_actprob = \
-                        model(mode, data['text'])
+                top_action, top_actprob, bot_action, bot_actprob = model(mode, data['text'])
             top_actions.append(top_action)
             top_actprobs.append(top_actprob)
             bot_actions.append(bot_action)
             bot_actprobs.append(bot_actprob)
-            acc1, tot1, cnt1 = calc_acc(top_action, bot_action, \
-                    data['relations'], mode)
+            acc1, tot1, cnt1 = calc_acc(top_action, bot_action, data['relations'], mode)
             acc += acc1
             tot += tot1
             cnt += cnt1
         if "test" not in mode:
-            loss += optimize_round(model, top_actions, top_actprobs, bot_actions,\
-                    bot_actprobs, data['relations'], mode)
+            loss += optimize_round(model, top_actions, top_actprobs, bot_actions, bot_actprobs, data['relations'], mode)
     return acc, cnt, tot, loss / len(datas)
+
 
 def worker(model, rank, dataQueue, resultQueue, freeProcess, lock, flock, lr):
     optimizer = optim.Adam(model.parameters(), lr=lr)
@@ -62,6 +59,7 @@ def worker(model, rank, dataQueue, resultQueue, freeProcess, lock, flock, lr):
         freeProcess.value += 1
         flock.release()
 
+
 def train(dataID, model, datas, sample_round, mode, dataQueue, resultQueue, freeProcess, lock, numprocess):
     dataPerProcess = len(datas) // numprocess
     while freeProcess.value != numprocess:
@@ -81,7 +79,7 @@ def train(dataID, model, datas, sample_round, mode, dataQueue, resultQueue, free
                 if item[3] == dataID:
                     break
                 else:
-                    print ("receive wrong dataID: ", item[3], "from process ", item[4])
+                    print("receive wrong dataID: ", item[3], "from process ", item[4])
             acc += item[0]
             cnt += item[1]
             tot += item[2]
@@ -97,8 +95,9 @@ def train(dataID, model, datas, sample_round, mode, dataQueue, resultQueue, free
 
     lock.release()
     if dataID > 0 and dataID % 20 == 0:
-        print (acc, cnt, tot, loss / numprocess)
+        print(acc, cnt, tot, loss / numprocess)
     return (acc, cnt, tot)
+
 
 def test(dataID, model, datas, mode, dataQueue, resultQueue, freeProcess, lock, numprocess):
     testmode = mode + ["test"]

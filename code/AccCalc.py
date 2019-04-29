@@ -6,6 +6,7 @@
 # E-mail: keavilzhangzty@gmail.com, truthless11@gmail.com
 ############################################################
 
+
 def calcF1(acc, cnt, tot, beta=1.0):
     if cnt == 0 or tot == 0:
         return 0
@@ -14,6 +15,7 @@ def calcF1(acc, cnt, tot, beta=1.0):
     if precision + recall < 1e-5:
         return 0
     return (1+beta*beta) * precision * recall / (beta*beta*precision + recall)
+
 
 def calc_acc(top_action, bot_action, gold_labels, mode):
     acc, cnt, tot = 0, 0, len(gold_labels)
@@ -44,15 +46,17 @@ def calc_acc(top_action, bot_action, gold_labels, mode):
     cnt //= tot
     return acc, tot, cnt
 
+
 def find_tail(tags, num):
     last = False
     for i, x in enumerate(tags):
         if x != num and last:
-            return i-1
-        if x == num+3:
+            return i - 1
+        if x == num + 3:
             last = True
-    return len(tags)-1 if last else -1
-    
+    return len(tags) - 1 if last else -1
+
+
 def rule_actions(gold_labels):
     length = len(gold_labels[0]['tags'])
     options = [0 for i in range(length)]
@@ -76,5 +80,4 @@ def rule_actions(gold_labels):
             if pos != -1:
                 options[pos] = tp
                 actions[pos] = tags
-    return options, actions	
-				
+    return options, actions

@@ -11,6 +11,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.autograd as autograd
 
+
 class TopModel(nn.Module):
     def __init__(self, dim, statedim, rel_count):
         super(TopModel, self).__init__()
@@ -24,6 +25,7 @@ class TopModel(nn.Module):
         prob = F.softmax(self.state2prob(outp), dim=0)
         return outp, prob 
 
+
 class BotModel(nn.Module):
     def __init__(self, dim, statedim, rel_count):
         super(BotModel, self).__init__()
@@ -36,6 +38,7 @@ class BotModel(nn.Module):
         outp = F.dropout(F.tanh(self.hid2state(inp)), training=training)
         prob = F.softmax(self.state2probL[rel-1](outp), dim=0)
         return outp, prob 
+
 
 class Model(nn.Module):
     def __init__(self, lr, dim, statedim, wv, rel_count):
@@ -114,9 +117,7 @@ class Model(nn.Module):
                 actions, actprobs = [], []
                 mem = self.top2bot(mem)
                 for y in range(len(text)):
-                    mem, probb = self.botModel(\
-                            self.entitytypevector(actionb)[0], wordin[y], \
-                            mem, rel, target, training)
+                    mem, probb = self.botModel(self.entitytypevector(actionb)[0], wordin[y], mem, rel, target, training)
                     actionb = self.sample(probb, training, preactions[x] if preactions is not None else None, y)
                     actprobb = probb[actionb]
                     actions.append(actionb.cpu().data[0])

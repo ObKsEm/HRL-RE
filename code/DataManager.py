@@ -9,6 +9,7 @@
 import numpy as np
 import json
 
+
 class DataManager:
     def __init__(self, path, testfile):
 
@@ -35,7 +36,7 @@ class DataManager:
                         wordsdic[word] = wordsdic[word] + 1
                     else:
                         wordsdic[word] = 1
-        wordssorted = sorted(wordsdic.items(), key = lambda d: (d[1],d[0]), reverse=True) 
+        wordssorted = sorted(wordsdic.items(), key=lambda d: (d[1], d[0]), reverse=True)
         self.words = {}
         for i in range(len(wordssorted)):
             self.words[wordssorted[i][0]] = i
@@ -53,7 +54,7 @@ class DataManager:
         
         #load word vector
         self.vector = np.random.rand(len(self.words)+1, 300) * 0.1
-        with open(path+("vector.txt")) as fl:
+        with open(path + ("vector.txt")) as fl:
             for line in fl.readlines():
                 vec = line.strip().split()
                 word = vec[0].lower()
@@ -65,7 +66,7 @@ class DataManager:
         #get relation count
         self.relationcnt = {}
         self.relations = []
-        for name in ['train','dev']:
+        for name in ['train', 'dev']:
             for item in self.data[name]:
                 for t in item['relations']:
                     rel = t['rtext']

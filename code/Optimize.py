@@ -11,6 +11,7 @@ import torch
 import torch.autograd as autograd
 from AccCalc import calc_acc, calcF1
 
+
 def calcTopReward(top_action, gold_labels):
     lenth = len(top_action)
     r = [0. for i in range(lenth)]
@@ -29,6 +30,7 @@ def calcTopReward(top_action, gold_labels):
             r[i] = ok
     return r
 
+
 def calcTopFinalReward(top_action, gold_labels, top_bias = 0.):
     r = 0.
     a1, t1, c1 = calc_acc(top_action, None, gold_labels, ["RE"])
@@ -40,6 +42,7 @@ def calcTopFinalReward(top_action, gold_labels, top_bias = 0.):
         r -= 0.5 * (c1 - t1)
     r *= len(top_action)
     return r - top_bias
+
 
 def calcBotReward(top_action, bot_action, gold_labels):
     lenth = len(top_action)
@@ -59,6 +62,7 @@ def calcBotReward(top_action, bot_action, gold_labels):
                             r[j][t] = -0.5
             j += 1
     return r
+
 
 def calcBotFinalReward(top_action, bot_action, gold_labels, bot_bias = 0.):
     lenth = len(top_action)
@@ -81,6 +85,7 @@ def calcBotFinalReward(top_action, bot_action, gold_labels, bot_bias = 0.):
         r[j] -= bot_bias
     return r
 
+
 def calcTopGrad(top_action, top_actprob, top_reward, top_final_reward, pretrain=False):
     lenth = len(top_action)
     decay_reward = top_final_reward 
@@ -94,6 +99,7 @@ def calcTopGrad(top_action, top_actprob, top_reward, top_final_reward, pretrain=
             to_grad *= 0.3
         grads = grads + to_grad
     return grads
+
 
 def calcBotGrad(top_action, bot_action, bot_actprob, bot_reward, bot_final_reward, pretrain=False):
     lenth = len(top_action)
@@ -117,6 +123,7 @@ def calcBotGrad(top_action, bot_action, bot_actprob, bot_reward, bot_final_rewar
             j += 1
     return bot_tot_reward, grads
 
+
 def optimize(model, top_action, top_actprob, bot_action, bot_actprob, gold_labels, mode, top_bias = 0., bot_bias = 0.):
     lenth = len(top_action)
     top_reward = calcTopReward(top_action, gold_labels)
@@ -135,6 +142,7 @@ def optimize(model, top_action, top_actprob, bot_action, bot_actprob, gold_label
     loss = grads.cpu().data[0]
     grads.backward()
     return loss
+
 
 def optimize_round(model, top_actions, top_actprobs, bot_actions, bot_actprobs, gold_labels, mode):
     sample_round = len(top_actions)
@@ -157,6 +165,5 @@ def optimize_round(model, top_actions, top_actprobs, bot_actions, bot_actprobs, 
         bot_bias = 0.
     loss = .0
     for i in range(sample_round):
-        loss += optimize(model, top_actions[i], top_actprobs[i], bot_actions[i], \
-                bot_actprobs[i], gold_labels, mode, top_bias, bot_bias)
+        loss += optimize(model, top_actions[i], top_actprobs[i], bot_actions[i], bot_actprobs[i], gold_labels, mode, top_bias, bot_bias)
     return loss / sample_round
