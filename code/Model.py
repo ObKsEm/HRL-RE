@@ -78,8 +78,8 @@ class Model(nn.Module):
         prehid = autograd.Variable(torch.cuda.FloatTensor(self.dim, ).fill_(0))
         prec = autograd.Variable(torch.cuda.FloatTensor(self.dim, ).fill_(0))
         front, back = [0 for i in range(len(text))], [0 for i in range(len(text))]
-        import pdb
-        pdb.set_trace()
+        import ipdb
+        ipdb.set_trace()
         for x in range(len(text)):
             prehid, prec = self.preLSTML(wvs[x], (prehid, prec))
             front[x] = prehid
