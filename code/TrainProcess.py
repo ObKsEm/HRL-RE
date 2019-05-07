@@ -68,8 +68,8 @@ def train(dataID, model, datas, sample_round, mode, dataQueue, resultQueue, free
     acc, cnt, tot = 0, 0, 0
     loss = .0
     for r in range(numprocess):
-        endPos = ((r+1)*dataPerProcess if r+1 != numprocess else len(datas))
-        data = datas[r*dataPerProcess: endPos]
+        endPos = ((r + 1) * dataPerProcess if r + 1 != numprocess else len(datas))
+        data = datas[r * dataPerProcess: endPos]
         dataQueue.put((data, sample_round, mode, dataID))
     lock.acquire()
     try:

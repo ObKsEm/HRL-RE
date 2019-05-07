@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="ab1e6bff-4e30-4f1f-a487-dc5038829b36" name="amazonaws" url="http://ec2-54-248-183-214.ap-northeast-1.compute.amazonaws.com">
+        <fileTransfer host="ec2-54-248-183-214.ap-northeast-1.compute.amazonaws.com" port="22" privateKey="$USER_HOME$/.ssh/id_rsa" rootFolder="/home/ubuntu/lichengzhi" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

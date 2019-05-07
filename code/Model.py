@@ -50,7 +50,7 @@ class Model(nn.Module):
         wvTensor = torch.FloatTensor(wv)
         self.wordvector = nn.Embedding(wvTensor.size(0), wvTensor.size(1))
         self.wordvector.weight = nn.Parameter(wvTensor)
-        self.relationvector = nn.Embedding(rel_count+1, dim)
+        self.relationvector = nn.Embedding(rel_count + 1, dim)
         self.entitytypevector = nn.Embedding(7, dim)
         self.preLSTML = nn.LSTMCell(dim, dim)
         self.preLSTMR = nn.LSTMCell(dim, dim)
@@ -78,8 +78,6 @@ class Model(nn.Module):
         prehid = autograd.Variable(torch.cuda.FloatTensor(self.dim, ).fill_(0))
         prec = autograd.Variable(torch.cuda.FloatTensor(self.dim, ).fill_(0))
         front, back = [0 for i in range(len(text))], [0 for i in range(len(text))]
-        import ipdb
-        ipdb.set_trace()
         for x in range(len(text)):
             prehid, prec = self.preLSTML(wvs[x], (prehid, prec))
             front[x] = prehid

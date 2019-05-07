@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always" serverName="ubuntu@ec2-54-248-183-214.ap-northeast-1.compute.amazonaws.com:22">
+    <serverData>
+      <paths name="amazonaws">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/HRL-RE" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="ubuntu@ec2-54-248-183-214.ap-northeast-1.compute.amazonaws.com:22">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/HRL-RE" local="$PROJECT_DIR$" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/data" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
+      <paths name="ubuntu@ec2-54-248-183-214.ap-northeast-1.compute.amazonaws.com:22 (1)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/ubuntu/lichengzhi/HRL-RE" local="$PROJECT_DIR$" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/data" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>
