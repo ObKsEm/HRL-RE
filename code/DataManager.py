@@ -76,7 +76,7 @@ class DataManager:
                     else:
                         self.relationcnt[rel] += 1
         self.relation_count = len(self.relations)
-        for name in ['train', 'test', 'dev'] :
+        for name in ['train', 'test', 'dev']:
             for item in self.data[name]:
                 for t in item['relations']:
                     t['type'] = self.relations.index(t['rtext']) + 1
