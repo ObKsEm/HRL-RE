@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="ubuntu@ec2-54-248-183-214.ap-northeast-1.compute.amazonaws.com:22">
+  <component name="PublishConfigData" autoUpload="Always" serverName="newgpu4" showAutoUploadSettingsWarning="false">
     <serverData>
       <paths name="amazonaws">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/HRL-RE" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="newgpu4">
         <serverdata>
           <mappings>
             <mapping deploy="/HRL-RE" local="$PROJECT_DIR$" web="/" />

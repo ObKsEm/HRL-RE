@@ -20,8 +20,8 @@ def load_filter(filter_file):
                 org = orgs.split(';；')
                 per = data.get('per')
                 title = data.get('property').get('title')
-                if title == "":
-                    title = "null"
+                if title is None:
+                    title = ""
                 ret[per].append({
                     "_id": id,
                     "_key": key,
