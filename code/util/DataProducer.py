@@ -113,35 +113,49 @@ def get_data_from_es(filter_dict):
     return res
 
 
-if __name__ == "__main__":
-    # data_file = "/home/ubuntu/lichengzhi/HRL-RE/data/person/filtered_person.json"
-    data_file = "/Users/lichengzhi/bailian/HRL-RE/data/person/filtered_person.json"
-    filter_dict = defaultdict(list)
-    with open(data_file, "r", encoding='utf-8') as f:
-        line = f.readline()
-        while line:
-            item = json.loads(line)
-            person = item.get('per')
-            d = dict()
-            for key in item:
-                if key != "per":
-                    d[key] = item[key]
-            filter_dict[person].append(d)
-            line = f.readline()
+def get_data_from_file(raw_data_file):
+    ret = list()
+    with open(raw_data_file, 'r') as f:
+        lines = f.readlines()
+        for line in lines:
+            ret.append(json.loads(line))
+    return ret
 
-    row_data = get_data_from_es(filter_dict)
-    with open('row_data.json', 'w', encoding='utf-8') as f:
-        for item in row_data:
-            f.write(json.dumps(item, ensure_ascii=False))
-            f.write('\n')
+
+if __name__ == "__main__":
+    es_data_file = '/home/lichengzhi/HRL-RE/data/person/whole_data/raw_data.json'
+    # data_file = "/home/lichengzhi/HRL-RE/data/person/filtered_person.json"
+    # # da    ta_file = "/Users/lichengzhi/bailian/HRL-RE/data/person/filtered_person.json"
+    # filter_dict = defaultdict(list)
+    # with open(data_file, "r", encoding='utf-8') as f:
+    #     line = f.readline()
+    #     while line:
+    #         item = json.loads(line)
+    #         person = item.get('per')
+    #         d = dict()
+    #         for key in item:
+    #             if key != "per":
+    #                 d[key] = item[key]
+    #         filter_dict[person].append(d)
+    #         line = f.readline()
+    #
+    # row_data = get_data_from_es(filter_dict)
+    # with open('row_data.json', 'w', encoding='utf-8') as f:
+    #     for item in row_data:
+    #         f.write(json.dumps(item, ensure_ascii=False))
+    #         f.write('\n')
+    raw_data = get_data_from_file(es_data_file)
 
     with open('train.json', 'w', encoding='utf-8') as f:
         num = 0
-        for item in row_data:
+        for item in raw_data:
             find_em1 = False
             find_em2 = False
             repeat_entity = False
             sentence = item.get('sentence').replace(' ', '')
+            sentence = sentence.replace('\n', '')
+            if sentence[0] == ',' or sentence[-1] != '。':
+                continue
             pos = baidu.original_lexer(sentence)
             if pos is not None:
                 words = [pos[i].get('item') for i in range(0, len(pos))]
@@ -168,7 +182,6 @@ if __name__ == "__main__":
                             tags.extend([1] * (entry_length - 1))
                             entry_length = 0
                             find_em1 = True
-
                     elif em2.find(entry) >= 0:
                         if em2 == entry:
                             if find_em2:
@@ -188,7 +201,9 @@ if __name__ == "__main__":
                             else:
                                 tags.append(0)
                         entry_length = 0
-                if (find_em1) and (find_em2) and (not repeat_entity):
+                if entry != '':
+                    tags.append(0)
+                if (find_em1) and (find_em2) and (not repeat_entity) and (len(pos) == len(tags)):
                     num += 1
                     res = {
                         'sentence': sentence,

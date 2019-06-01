@@ -18,7 +18,12 @@ def workProcess(model, datas, sample_round, mode):
     loss = .0
     for data in datas:
         top_actions, top_actprobs, bot_actions, bot_actprobs = [], [], [], []
-        preoptions, preactions = rule_actions(data['relations'])   
+        preoptions, preactions = rule_actions(data['relations'])
+        text = data['text']
+        if preoptions and len(text) > len(preoptions):
+            print('text: %s\n' % text)
+            print('preoptions: %s\n' % preoptions)
+            assert (len(preoptions) == len(text))
         for i in range(sample_round):
             if "pretrain" in mode and "test" not in mode:
                 top_action, top_actprob, bot_action, bot_actprob = model(mode, data['text'], preoptions, preactions)

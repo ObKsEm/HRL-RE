@@ -13,19 +13,19 @@ import json
 class DataManager:
     def __init__(self, path, testfile):
 
-        #read data
+        # read data
         self.data = {}
         for name in ["train", "test"]:
             self.data[name] = []
             filename = testfile if name == "test" else name
-            with open(path+(filename+".json")) as fl:
+            with open(path + (filename + ".json")) as fl:
                 for line in fl.readlines():
                     self.data[name].append(json.loads(line))
         trainlen = len(self.data["train"])
         self.data['dev'] = self.data['train'][:int(trainlen*0.05)]
         self.data['train'] = self.data['train'][int(trainlen*0.05):]
-        
-        #arrange words
+
+        # arrange words
         wordsdic = {}
         for name in ["train", "dev"]:
             datas = self.data[name]
@@ -42,7 +42,7 @@ class DataManager:
             self.words[wordssorted[i][0]] = i
         OOV = len(wordssorted)
 
-        #get text
+        # get text
         for name in ["train", "test", "dev"]:
             for item in self.data[name]:
                 item['text'] = []
@@ -51,9 +51,9 @@ class DataManager:
                         item['text'].append(OOV)
                     else:
                         item['text'].append(self.words[word.lower()])
-        
-        #load word vector
-        self.vector = np.random.rand(len(self.words)+1, 300) * 0.1
+
+        # load word vector
+        self.vector = np.random.rand(len(self.words) + 1, 200) * 0.1
         with open(path + ("vector.txt")) as fl:
             for line in fl.readlines():
                 vec = line.strip().split()
@@ -63,7 +63,7 @@ class DataManager:
                     self.vector[self.words[word]] = np.asarray(vec)
         self.vector = np.asarray(self.vector)
 
-        #get relation count
+        # get relation count
         self.relationcnt = {}
         self.relations = []
         for name in ['train', 'dev']:

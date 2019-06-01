@@ -73,7 +73,7 @@ class Model(nn.Module):
         bot_action, bot_actprob = [], [] 
         training = True if "test" not in mode else False
 
-        #-----------------------------------------------------------------
+        # -----------------------------------------------------------------
         # Prepare
         prehid = autograd.Variable(torch.cuda.FloatTensor(self.dim, ).fill_(0))
         prec = autograd.Variable(torch.cuda.FloatTensor(self.dim, ).fill_(0))
@@ -89,12 +89,12 @@ class Model(nn.Module):
         wordin = []
         for x in range(len(text)):
             wordin.append(torch.cat([front[x], back[x]]))
-        #------------------------------------------------------------------
+        # ------------------------------------------------------------------
         # First Layer
         mem = autograd.Variable(torch.cuda.FloatTensor(self.statedim, ).fill_(0))
         action = autograd.Variable(torch.cuda.LongTensor(1, ).fill_(0))
         rel_action = autograd.Variable(torch.cuda.LongTensor(1, ).fill_(0)) 
-        for x in range(len(text)):                   
+        for x in range(len(text)):
             mem, prob = self.topModel(wordin[x], self.relationvector(rel_action)[0], mem, training)
             action = self.sample(prob, training, preoptions, x)
             if action.data[0] != 0: 
@@ -105,8 +105,7 @@ class Model(nn.Module):
                 top_actprob.append(actprob.cpu().data[0])
             else:
                 top_actprob.append(actprob)
-
-            #----------------------------------------------------------------
+            # ----------------------------------------------------------------
             # Second Layer
             if "NER" in mode and action.data[0] > 0:
                 rel = action.data[0]

@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="newgpu4" showAutoUploadSettingsWarning="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="lichengzhi@100.64.32.2:22" showAutoUploadSettingsWarning="false">
     <serverData>
       <paths name="amazonaws">
         <serverdata>
           <mappings>
             <mapping deploy="/HRL-RE" local="$PROJECT_DIR$" web="/" />
           </mappings>
+        </serverdata>
+      </paths>
+      <paths name="lichengzhi@100.64.32.2:22">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/HRL-RE" local="$PROJECT_DIR$" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/data" />
+          </excludedPaths>
         </serverdata>
       </paths>
       <paths name="newgpu4">
