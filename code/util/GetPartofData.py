@@ -14,7 +14,7 @@ if __name__ == '__main__':
         line = f.readline()
         while line and num < train_data_size:
             rd = random.uniform(0, 1)
-            if 0 <= rd <= 0.1:
+            if 0 <= rd <= 0.5:
                 num += 1
                 item = json.loads(line)
                 for rel in item.get('relations'):
@@ -22,11 +22,11 @@ if __name__ == '__main__':
                 train_data.append(item)
 
             line = f.readline()
-
+        pass
         num = 0
         while line and num < test_data_size:
             rd = random.uniform(0, 1)
-            if 0 <= rd <= 0.05:
+            if 0 <= rd <= 0.3:
                 num += 1
                 item = json.loads(line)
                 inset = True

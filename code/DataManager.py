@@ -5,6 +5,7 @@
 # Author: Tianyang Zhang, Ryuichi Takanobu
 # E-mail: keavilzhangzty@gmail.com, truthless11@gmail.com
 ############################################################
+import os
 
 import numpy as np
 import json
@@ -18,7 +19,7 @@ class DataManager:
         for name in ["train", "test"]:
             self.data[name] = []
             filename = testfile if name == "test" else name
-            with open(path + (filename + ".json")) as fl:
+            with open(os.path.join(path, (filename + ".json"))) as fl:
                 for line in fl.readlines():
                     self.data[name].append(json.loads(line))
         trainlen = len(self.data["train"])
@@ -54,7 +55,7 @@ class DataManager:
 
         # load word vector
         self.vector = np.random.rand(len(self.words) + 1, 200) * 0.1
-        with open(path + ("vector.txt")) as fl:
+        with open(os.path.join(path, "vector.txt")) as fl:
             for line in fl.readlines():
                 vec = line.strip().split()
                 word = vec[0].lower()
